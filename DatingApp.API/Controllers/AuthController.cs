@@ -46,7 +46,7 @@ namespace DatingApp.API.Controllers
         public async Task<IActionResult> Login(UserForRegisterDto userForRegisterDto)
         {
             //Uso la libreria JWT.IO per gestire il token di autenticazione
-
+            
             //Controllo di avere l'utente con le credenziali passate
             var userFromRepo = await _repository.Login(userForRegisterDto.Username.ToLower(), userForRegisterDto.Password);
 
@@ -58,7 +58,7 @@ namespace DatingApp.API.Controllers
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
                 new Claim(ClaimTypes.Name, userFromRepo.Username)
             };
-            
+
             //Creo una chiave sicura
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
@@ -66,7 +66,8 @@ namespace DatingApp.API.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             //Creo il token descriptor
-            var tokenDescriptor = new SecurityTokenDescriptor{
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds
@@ -75,7 +76,8 @@ namespace DatingApp.API.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return Ok(new {
+            return Ok(new
+            {
                 token = tokenHandler.WriteToken(token)
             });
 
