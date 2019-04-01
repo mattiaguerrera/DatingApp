@@ -1,5 +1,5 @@
 {
     "vscode.tsc.compiler.alertTSConfigChanges": "never",
-    // "http.proxyStrictSSL": false,
-    // "http.proxy": "http://mguerrera:Marzo2019@192.168.100.37:8080/"
+    "http.proxyStrictSSL": false,
+    "http.proxy": "http://mguerrera:Marzo2019@192.168.100.37:8080/"
 }

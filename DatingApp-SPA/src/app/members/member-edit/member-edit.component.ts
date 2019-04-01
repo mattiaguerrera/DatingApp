@@ -5,6 +5,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { NgForm } from '@angular/forms';
 import { UserService } from 'src/app/_services/user.service';
 import { AuthService } from 'src/app/_services/auth.service';
+import { Photo } from 'src/app/_models/photo';
 
 @Component({
   selector: 'app-member-edit',
@@ -15,6 +16,7 @@ export class MemberEditComponent implements OnInit {
 
   @ViewChild('editForm') editForm: NgForm;
   user: User;
+  photoUrl: string;
   @HostListener('window:beforeunload', ['$event']) // messaggio di conferma di chiusura del browser in caso di non salvataggio del form
   unloadNotification($event: any) {
     if (this.editForm.dirty) {
@@ -31,6 +33,7 @@ export class MemberEditComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.user = data['user']; // recupero il dato dell'utente dal Member Edit Resolver
     });
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   updateUser() {
@@ -40,6 +43,12 @@ export class MemberEditComponent implements OnInit {
     }, error => {
       this.alertify.error(error);
     });
+  }
+
+  updateMainPhoto(photoUrl: string) {
+    // visualizzo la foto settata come Main appena preso sul bottone
+    // evento chiamato dal componente figlio Photo Editor
+    this.user.photoUrl = photoUrl;
   }
 
 }
